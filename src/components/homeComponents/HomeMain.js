@@ -1,21 +1,26 @@
 
-import React from 'react'
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Platform } from 'react-native'
+import React, { useEffect } from 'react'
+import { StyleSheet, SafeAreaView, ScrollView, Platform } from 'react-native'
 import HomeHeader from './HomeHeader';
 import HomeBanner from './HomeBanner';
 import HomeCategory from './HomeCategory';
 import HomeIntroProduct from './HomeIntroProduct';
-import { useScrollToTop } from '@react-navigation/native';
+import { useDispatch } from 'react-redux'
+import * as actions from '../../redux/actions/index'
 
 export default function HomeMain({navigation}) {
-    const ref = React.useRef(null);
-    useScrollToTop(ref);
+    const dispatch = useDispatch()
+    useEffect( () =>(
+       dispatch(actions.actFetchPostRequest('shops'))
+    ), [])
     return (
         <SafeAreaView style={styles.Container}>
             <HomeHeader navigation={navigation}/>
-            <ScrollView showsVerticalScrollIndicator={false} ref={ref}>
+            <ScrollView 
+                showsVerticalScrollIndicator={false}
+            >
                 <HomeBanner />
-                <HomeCategory />
+                <HomeCategory navigation={navigation} />
                 <HomeIntroProduct name='HeadPhone' navigation={navigation}/>
                 <HomeIntroProduct name='AirPod' navigation={navigation}/>
                 <HomeIntroProduct name='Microphone' navigation={navigation}/>

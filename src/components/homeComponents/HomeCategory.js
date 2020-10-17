@@ -1,35 +1,36 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity  } from 'react-native'
 
-export default function HomeCategory() {
+export default function HomeCategory(props) {
+    const {navigation} = props
     return (
         <View style={styles.CateContainer}>
             <Text style={styles.CateTitle}>Danh mục sản phẩm</Text>
             <View style={styles.CateWrap}>
-                <View style={styles.CateItem}>
+                <TouchableOpacity style={styles.CateItem} onPress = { () => navigation.navigate('AllProducts', {name: 'HeadPhone'})}>
                     <Image 
                         source={ require('../../assets/images/icon-headPhone.png')}
                         style={styles.CateItemImg}
                     />
-                </View>
-                <View style={styles.CateItem}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.CateItem} onPress = { () => navigation.navigate('AllProducts', {name: 'AirPod'})}>
                     <Image 
                         source={{ uri: 'https://cdn.iconscout.com/icon/free/png-256/airpods-9-448167.png'}}
                         style={styles.CateItemImg}
                     />
-                </View>
-                <View style={styles.CateItem}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.CateItem} onPress = { () => navigation.navigate('AllProducts', {name: 'Microphone'})}>
                     <Image 
                         source={{ uri: 'https://img.icons8.com/ios/452/microphone.png'}}
                         style={styles.CateItemImg}
                     />
-                </View>
-                <View style={styles.CateItem}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.CateItem} onPress = { () => navigation.navigate('AllProducts', {name: 'Speaker'})}>
                     <Image 
                         source={{ uri: 'https://cdn.iconscout.com/icon/free/png-256/speaker-1751756-1489642.png'}}
                         style={styles.CateItemImg}
                     />
-                </View>
+                </TouchableOpacity>
             </View>
         </View>
     )

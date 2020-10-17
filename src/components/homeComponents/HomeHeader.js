@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, TextInput } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { Feather } from '@expo/vector-icons';
 import InputSearch from '../searchComponents/InputSearch';
 export default function HomeHeader(props) {
@@ -11,7 +11,7 @@ export default function HomeHeader(props) {
                 onPress={() => props.navigation.openDrawer()} 
                 style={{paddingLeft: 10, paddingRight: 15, paddingVertical: 5}}
             />
-           <InputSearch />
+            <InputSearch />
             <View style={styles.Notify}>
                 <Feather 
                 name='bell' 

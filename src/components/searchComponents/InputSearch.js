@@ -1,13 +1,19 @@
 import React from 'react'
-import { StyleSheet, View, TextInput } from 'react-native'
+import { StyleSheet, View, TextInput, ActivityIndicator } from 'react-native'
 import { Feather } from '@expo/vector-icons';
-export default function InputSearch() {
+
+export default function InputSearch(props) {
+    function onHandleSearch(text){
+        props.onHandleSearchInput(text)
+    } 
     return (
         <View style={styles.SearchBar}>
             <Feather name='search' size={22} color='#494949'/>
             <TextInput 
                 placeholder='Từ khóa sản phẩm'
                 style={styles.InputSearch}
+                onChangeText={(text) => onHandleSearch(text)}
+                autoFocus={props.focus}
             />
         </View>
     )

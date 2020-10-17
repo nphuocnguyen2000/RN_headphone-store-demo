@@ -1,68 +1,49 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image} from 'react-native'
+import { StyleSheet, Text, View, Image, ActivityIndicator, TouchableOpacity, ScrollView} from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux'
 export default function AllProducts({navigation, route}) {
+    const {name} = route.params
+    const data = useSelector( (state) => state.products)
+    const dataFilter = data.filter( (product) => product.category ===  name.toLowerCase())
     return (
         <View style={styles.Container}>
             <View style={styles.AllProductsTitle}>
-                <Text style={styles.AllProductsTitleText}>{route.params.name}</Text>
+                <Text style={styles.AllProductsTitleText}>{name}</Text>
                 <AntDesign name='appstore1' size={20} style={{paddingHorizontal: 15}}/>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} >
                 <View style={styles.IntroProductWrap}>
-                    <View style={styles.IntroProductItem}>
-                        <View style={styles.IntroProductItemIntro}>
-                            <Image 
-                                source={{uri: 'https://i5.walmartimages.com/asr/202ab4fe-c67f-4ca2-a1f4-7a5a0be2ab18_1.f277eb7613e84ccb437ec98c3a12e981.jpeg?odnWidth=612&odnHeight=612&odnBg=ffffff'}}
-                                style={styles.IntroImg}
-                            />
-                            <Text  numberOfLines={2} style={styles.IntroName}>Sony MDR-7506 Head Professional </Text>
-                            <View style={styles.IntroPriceWrap}>
-                                <Text style={styles.IntroPriceOld}>440,000 đ</Text>
-                                <Text style={styles.IntroPrice}>340,000 đ</Text>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={styles.IntroProductItem}>
-                        <View style={styles.IntroProductItemIntro}>
-                            <Image 
-                                source={{uri: 'https://i5.walmartimages.com/asr/202ab4fe-c67f-4ca2-a1f4-7a5a0be2ab18_1.f277eb7613e84ccb437ec98c3a12e981.jpeg?odnWidth=612&odnHeight=612&odnBg=ffffff'}}
-                                style={styles.IntroImg}
-                            />
-                            <Text  numberOfLines={2} style={styles.IntroName}>Sony MDR-7506 Head Professional </Text>
-                            <View style={styles.IntroPriceWrap}>
-                                <Text style={styles.IntroPriceOld}>440,000 đ</Text>
-                                <Text style={styles.IntroPrice}>340,000 đ</Text>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={styles.IntroProductItem}>
-                        <View style={styles.IntroProductItemIntro}>
-                            <Image 
-                                source={{uri: 'https://i5.walmartimages.com/asr/202ab4fe-c67f-4ca2-a1f4-7a5a0be2ab18_1.f277eb7613e84ccb437ec98c3a12e981.jpeg?odnWidth=612&odnHeight=612&odnBg=ffffff'}}
-                                style={styles.IntroImg}
-                            />
-                            <Text  numberOfLines={2} style={styles.IntroName}>Sony MDR-7506 Head Professional </Text>
-                            <View style={styles.IntroPriceWrap}>
-                                <Text style={styles.IntroPriceOld}>440,000 đ</Text>
-                                <Text style={styles.IntroPrice}>340,000 đ</Text>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={styles.IntroProductItem}>
-                        <View style={styles.IntroProductItemIntro}>
-                            <Image 
-                                source={{uri: 'https://i5.walmartimages.com/asr/202ab4fe-c67f-4ca2-a1f4-7a5a0be2ab18_1.f277eb7613e84ccb437ec98c3a12e981.jpeg?odnWidth=612&odnHeight=612&odnBg=ffffff'}}
-                                style={styles.IntroImg}
-                            />
-                            <Text  numberOfLines={2} style={styles.IntroName}>Sony MDR-7506 Head Professional </Text>
-                            <View style={styles.IntroPriceWrap}>
-                                <Text style={styles.IntroPriceOld}>440,000 đ</Text>
-                                <Text style={styles.IntroPrice}>340,000 đ</Text>
-                            </View>
-                        </View>
-                    </View>
+                    {
+                        dataFilter.length === 0 ? 
+                        (
+                            <ActivityIndicator size="large" color="black" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', height: 500 }}/>
+                        )
+                        :
+                        (
+                            dataFilter.map( (product) => {
+                                return (
+                                    <TouchableOpacity 
+                                        style={styles.IntroProductItem} 
+                                        key={product.id}
+                                        onPress={ () => {navigation.navigate('DetailProduct',{ id: product.id, navigation: navigation })}}
+                                    >
+                                        <View style={styles.IntroProductItemIntro}>
+                                            <Image 
+                                                source={{uri: product.image}}
+                                                style={styles.IntroImg}
+                                            />
+                                            <Text numberOfLines={2} style={styles.IntroName}>product.name</Text>
+                                            <View style={styles.IntroPriceWrap}>
+                                                <Text style={styles.IntroPriceOld}>440,000 đ</Text>
+                                                <Text style={styles.IntroPrice}>{product.price},000đ</Text>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                )
+                            })
+                        )
+                    }
                 </View>
             </ScrollView>
         </View>

@@ -1,8 +1,11 @@
-import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
-
+import React, {useEffect} from 'react'
+import { Image, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
+import {useSelector} from 'react-redux'
 export default function HomeIntroProduct(props) {
     const { navigation, name } = props
+    const data = useSelector( state => state.products)
+    const dataFilter = data.filter( (product) => product.category ===  name.toLowerCase())
+    const dataRenderHome = dataFilter.slice(0, 4)
     return (
         
         <View style={styles.IntroProduct}>
@@ -16,58 +19,33 @@ export default function HomeIntroProduct(props) {
                 </Text>
             </View>
             <View style={styles.IntroProductWrap}>
-                <View style={styles.IntroProductItem}>
-                    <View style={styles.IntroProductItemIntro}>
-                        <Image 
-                            source={{uri: 'https://i5.walmartimages.com/asr/202ab4fe-c67f-4ca2-a1f4-7a5a0be2ab18_1.f277eb7613e84ccb437ec98c3a12e981.jpeg?odnWidth=612&odnHeight=612&odnBg=ffffff'}}
-                            style={styles.IntroImg}
-                        />
-                        <Text  numberOfLines={2} style={styles.IntroName}>Sony MDR-7506 Head Professional </Text>
-                        <View style={styles.IntroPriceWrap}>
-                            <Text style={styles.IntroPriceOld}>440,000 đ</Text>
-                            <Text style={styles.IntroPrice}>340,000 đ</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.IntroProductItem}>
-                    <View style={styles.IntroProductItemIntro}>
-                        <Image 
-                            source={{uri: 'https://i5.walmartimages.com/asr/202ab4fe-c67f-4ca2-a1f4-7a5a0be2ab18_1.f277eb7613e84ccb437ec98c3a12e981.jpeg?odnWidth=612&odnHeight=612&odnBg=ffffff'}}
-                            style={styles.IntroImg}
-                        />
-                        <Text style={styles.IntroName}>Sony MDR-7506 Head Professional </Text>
-                        <View style={styles.IntroPriceWrap}>
-                            <Text style={styles.IntroPriceOld}>440,000 đ</Text>
-                            <Text style={styles.IntroPrice}>340,000 đ</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.IntroProductItem}>
-                    <View style={styles.IntroProductItemIntro}>
-                        <Image 
-                            source={{uri: 'https://i5.walmartimages.com/asr/202ab4fe-c67f-4ca2-a1f4-7a5a0be2ab18_1.f277eb7613e84ccb437ec98c3a12e981.jpeg?odnWidth=612&odnHeight=612&odnBg=ffffff'}}
-                            style={styles.IntroImg}
-                        />
-                        <Text style={styles.IntroName}>Sony MDR-7506 Head Professional </Text>
-                        <View style={styles.IntroPriceWrap}>
-                            <Text style={styles.IntroPriceOld}>440,000 đ</Text>
-                            <Text style={styles.IntroPrice}>340,000 đ</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.IntroProductItem}>
-                    <View style={styles.IntroProductItemIntro}>
-                        <Image 
-                            source={{uri: 'https://i5.walmartimages.com/asr/202ab4fe-c67f-4ca2-a1f4-7a5a0be2ab18_1.f277eb7613e84ccb437ec98c3a12e981.jpeg?odnWidth=612&odnHeight=612&odnBg=ffffff'}}
-                            style={styles.IntroImg}
-                        />
-                        <Text style={styles.IntroName}>Sony MDR-7506 Head Professional </Text>
-                        <View style={styles.IntroPriceWrap}>
-                            <Text style={styles.IntroPriceOld}>440,000 đ</Text>
-                            <Text style={styles.IntroPrice}>340,000 đ</Text>
-                        </View>
-                    </View>
-                </View>
+                {
+                    !dataRenderHome.length ? 
+                    (
+                        <ActivityIndicator size="large" color="black" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', height: 50 }}/>
+                    )
+                    :
+                    (
+                        dataRenderHome.map((product) => {
+                            return (
+                                    <TouchableOpacity style={styles.IntroProductItem} onPress={ () => {navigation.navigate('DetailProduct',{ id: product.id, navigation: navigation })}} key={product.id}>
+                                        <View style={styles.IntroProductItemIntro}>
+                                            <Image 
+                                                source={{uri: product.image}}
+                                                style={styles.IntroImg}
+                                                
+                                            />
+                                            <Text  numberOfLines={2} style={styles.IntroName}>{product.nameProduct}</Text>
+                                            <View style={styles.IntroPriceWrap}>
+                                                <Text style={styles.IntroPriceOld}>440,000 đ</Text>
+                                                <Text style={styles.IntroPrice}>{product.price},000đ</Text>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                            )
+                        })
+                    )
+                }
             </View>
         </View>
     )
@@ -94,7 +72,7 @@ const styles = StyleSheet.create({
         padding: 3,
         backgroundColor: '#eee',
         marginBottom: 5,
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     IntroProductItemIntro: {
         flex: 1,

@@ -1,9 +1,11 @@
+import * as type from '../actions/actionTypes'
+
 var inititalState = []
 
 const myReducers = (state = inititalState, action)=>{
     switch(action.type){
-        case 'FETCH_DATA_SHOP':
-            state = action.posts   
+        case type.FETCH_DATA_PRODUCTS:
+            state = action.products   
             return [...state]
         default: 
             return [...state]

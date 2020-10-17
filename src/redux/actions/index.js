@@ -1,23 +1,19 @@
 import axios from 'axios'
-export const loginAction = ( payload ) => {
-  return {
-    type: 'LOGIN',
-    payload
-  }
-}
+import * as types from './actionTypes'
 
 export const actFetchPostRequest = (params)=>{
   return(dispatch) =>{
-        axios.get(`https://5e8fc291fe7f2a00165ef5af.mockapi.io/api/${params}`)
+        axios.get(`https://5f831a256b97440016f4e334.mockapi.io/api/${params}`)
           .then(res => {
-              dispatch(actFetchDataPost(res.data))
+              console.log("----call server");
+              dispatch(actFetchDataProducts(res.data))
           })
           .catch(err => console.log(err))
   }
 }
-export const actFetchDataPost = (posts)=>{
+export const actFetchDataProducts = (products)=>{
   return{
-      type: 'FETCH_DATA_SHOP',
-      posts
+      type: types.FETCH_DATA_PRODUCTS,
+      products
   }
 }
