@@ -7,8 +7,9 @@ import CartScreen from '../screens/CartScreen';
 import NotifyScreen from '../screens/NotifyScreen';
 import AccountScreen from '../screens/AccountScreen';
 import SearchScreen from '../screens/SearchScreen';
-
+import {useSelector} from 'react-redux'
 export default function App() {
+  const carts = useSelector(state => state.carts)
   const Tab = createBottomTabNavigator();
   return (
       <Tab.Navigator
@@ -47,7 +48,7 @@ export default function App() {
             tabBarIcon: ({color}) => (
               <SimpleLineIcons name="handbag" size={25} color={color} />
             ),
-          tabBarBadge: 3
+          tabBarBadge: carts.length
           }}
         />
         <Tab.Screen
@@ -58,7 +59,6 @@ export default function App() {
             tabBarIcon: ({color}) => (
               <Feather name="bell" size={25} color={color} />
             ),
-            tabBarBadge: 1
           }}
         />
         <Tab.Screen

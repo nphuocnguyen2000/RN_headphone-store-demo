@@ -17,3 +17,23 @@ export const actFetchDataProducts = (products)=>{
       products
   }
 }
+
+export const actAddToCart = (item) =>{
+  return{
+      type: types.ADD_TO_CART,
+      item
+  }
+}
+export const actUpdateQuantityCart = (cart, quantity)=>{
+  return{
+      type: types.UPDATE_QUANTITY_TO_CART,
+      cart,
+      quantity
+  }
+}
+export const actDeleteCart = (cart)=>{
+  return{
+      type: types.REMOVE_TO_CART,
+      cart
+  }
+}
