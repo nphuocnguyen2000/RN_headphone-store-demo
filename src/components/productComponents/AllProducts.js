@@ -1,27 +1,58 @@
-import React from 'react'
-import { StyleSheet, Text, View, Image, ActivityIndicator, TouchableOpacity, ScrollView} from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, Image, ActivityIndicator, TouchableOpacity, ScrollView, SafeAreaView, RefreshControl} from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { useSelector } from 'react-redux'
+import AllProductTitle from './AllProductTitle';
 export default function AllProducts({navigation, route}) {
     const {name} = route.params
+    const [refreshing, setRefreshing] = useState(false)
+    const [search, setSearch] = useState('')
     const data = useSelector( (state) => state.products)
     const dataFilter = data.filter( (product) => product.category ===  name.toLowerCase())
+    function priceDiscount(item){
+        let price = item.price
+        if(item.percentDiscount){
+            if(item.priceDiscount !== 0){
+                price = item.price * ((100 - item.percentDiscount)/100)
+            }
+        }   
+        return Math.ceil(price);
+    }
+    function onHandleSearch(text) {
+        setSearch(text);
+    }
+    let dataSearch = dataFilter.filter(function(product) {
+        return product.nameProduct.toLowerCase().indexOf(search.toLowerCase()) !== -1;
+    })
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        dataSearch = dataFilter.filter(function(product) {
+            return product.nameProduct.toLowerCase().indexOf(search.toLowerCase()) !== -1;
+        })
+        setRefreshing(false);
+    }, []);  
     return (
-        <View style={styles.Container}>
+        <SafeAreaView style={styles.Container}>
+            <AllProductTitle navigation={navigation} onHandleSearch={onHandleSearch}/>
             <View style={styles.AllProductsTitle}>
                 <Text style={styles.AllProductsTitleText}>{name}</Text>
                 <AntDesign name='appstore1' size={20} style={{paddingHorizontal: 15}}/>
             </View>
-            <ScrollView showsVerticalScrollIndicator={false} >
+            <ScrollView 
+                showsVerticalScrollIndicator={false} 
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+            >
                 <View style={styles.IntroProductWrap}>
                     {
-                        dataFilter.length === 0 ? 
+                        dataSearch.length === 0 ? 
                         (
                             <ActivityIndicator size="large" color="black" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', height: 500 }}/>
                         )
                         :
                         (
-                            dataFilter.map( (product) => {
+                            dataSearch.map( (product) => {
                                 return (
                                     <TouchableOpacity 
                                         style={styles.IntroProductItem} 
@@ -33,10 +64,10 @@ export default function AllProducts({navigation, route}) {
                                                 source={{uri: product.image}}
                                                 style={styles.IntroImg}
                                             />
-                                            <Text numberOfLines={2} style={styles.IntroName}>product.name</Text>
+                                            <Text numberOfLines={2} style={styles.IntroName}>{product.nameProduct}</Text>
                                             <View style={styles.IntroPriceWrap}>
-                                                <Text style={styles.IntroPriceOld}>440,000 đ</Text>
-                                                <Text style={styles.IntroPrice}>{product.price},000đ</Text>
+                                                <Text style={styles.IntroPriceOld}>{product.price},000 đ</Text>
+                                                <Text style={styles.IntroPrice}>{priceDiscount(product)},000đ</Text>
                                             </View>
                                         </View>
                                     </TouchableOpacity>
@@ -46,7 +77,7 @@ export default function AllProducts({navigation, route}) {
                     }
                 </View>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     )
 }
 

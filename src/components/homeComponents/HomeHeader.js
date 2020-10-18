@@ -11,7 +11,15 @@ export default function HomeHeader(props) {
                 onPress={() => props.navigation.openDrawer()} 
                 style={{paddingLeft: 10, paddingRight: 15, paddingVertical: 5}}
             />
-            <InputSearch />
+            <TouchableOpacity 
+            onPress={() => props.navigation.navigate('Search', {navigation: props.navigation})}
+            style={{flex: 1}}
+            >
+               <View style={styles.SearchBar}>
+                    <Feather name='search' size={22} color='#494949'/>
+                    <Text style={{color: '#999', fontSize:13, paddingHorizontal: 5}}>Từ khóa sản phẩm</Text>
+                </View>
+            </TouchableOpacity>
             <View style={styles.Notify}>
                 <Feather 
                 name='bell' 
@@ -49,6 +57,19 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         overflow: 'hidden', 
         color: '#eee'
+    },
+    SearchBar: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#ececec',
+        padding: 5,
+        borderRadius: 10,
+    },
+    InputSearch: {
+        width: 230,
+        paddingHorizontal: 5,
+        fontSize: 13
     },
 
 })

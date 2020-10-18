@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState} from 'react'
 import { StyleSheet, Text, View, Animated, SafeAreaView, Image} from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import {AntDesign} from '@expo/vector-icons';     
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -32,8 +32,18 @@ export default function DetailProduct({route, navigation}) {
     function setVisible(status){
         setModalVisible(status)
     }
+    function priceDiscount(item){
+        let price = item.price
+        if(item.percentDiscount){
+            if(item.priceDiscount !== 0){
+                price = item.price * ((100 - item.percentDiscount)/100)
+            }
+        }   
+        return Math.ceil(price);
+    }
     return (
         <SafeAreaView style={styles.Container}>
+            <ScrollView>
             <AntDesign 
                 name='arrowleft' 
                 size={30} 
@@ -50,8 +60,8 @@ export default function DetailProduct({route, navigation}) {
                         <Text numberOfLines={2} style={styles.Name} >{infoProductById.nameProduct}</Text>
                     
                         <View style={styles.PriceWrap}>
-                            <Text style={styles.Price}>{infoProductById.price},000đ</Text>
-                            <Text style={styles.oldPrice}>220,300đ</Text>
+                            <Text style={styles.Price}>{priceDiscount(infoProductById)},000đ</Text>
+                            <Text style={styles.oldPrice}>{infoProductById.price},000đ</Text>
                         </View>
                     </View>
 
@@ -72,7 +82,7 @@ export default function DetailProduct({route, navigation}) {
                     <View><Text>Loadingg</Text></View>
                 )
             }
-            
+            </ScrollView>
         </SafeAreaView>
         
     )

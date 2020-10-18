@@ -1,20 +1,44 @@
 import React, {useState} from 'react'
-import { StyleSheet, View, SafeAreaView, Image, Text } from 'react-native'
+import { StyleSheet, View, SafeAreaView, Image, Text, TouchableOpacity } from 'react-native'
 import InputSearch from '../components/searchComponents/InputSearch'
 import { AntDesign } from '@expo/vector-icons';
 import {useSelector} from 'react-redux'
-import { TouchableOpacity } from 'react-native-gesture-handler';
-export default function SearchScreen() {
+export default function SearchScreen({navigation}) {
     const data = useSelector((state) => state.products)
     const [value, setValue] = useState ('')
     function onHandleSearchInput(text){
         setValue(text);
     }
+    function priceDiscount(item){
+        let price = item.price
+        if(item.percentDiscount){
+            if(item.priceDiscount !== 0){
+                price = item.price * ((100 - item.percentDiscount)/100)
+            }
+        }   
+        return Math.ceil(price);
+    }
     let dataFilter = data.filter(function(product) {
-        // return product.nameProduct.toLowerCase().indexOf(value.toLowerCase()) !== -1;
         return product.nameProduct.toLowerCase().indexOf(value.toLowerCase()) !== -1;
     })  
-    console.log(dataFilter);
+    const dataFilterSlice = dataFilter.slice(0,4)
+    const resultDataFiler = dataFilterSlice.map( (item) => {
+        return (
+            <TouchableOpacity style={styles.SearchSubItem} key={item.id} onPress={() => { navigation.navigate('DetailProduct', {id: item.id, navigation: navigation})}}>
+                <Image 
+                source={{uri: item.image}} 
+                style={styles.SearchSubItemImg}
+                />
+                <View style={styles.SearchSubInfo}>
+                    <Text style={styles.SearchSubNamePr} numberOfLines={1}>{item.nameProduct}</Text>
+                    <View style={styles.SearchSubPrice}>
+                        <Text style={styles.Price}>{priceDiscount(item)},000đ</Text>
+                        <Text style={styles.oldPrice}>{item.price},000đ</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    })
     return (
         <SafeAreaView style={styles.Container}>
             <View style={[styles.SearchHeader, { overflow: 'hidden', paddingBottom: 5 }]}>
@@ -24,23 +48,8 @@ export default function SearchScreen() {
             </View>
             <View style={styles.SearchInfoSearch}>
                 <View style={styles.SearchSub}>
-                    
-                    <View style={styles.SearchSubItem}>
-                        <Image 
-                        source={{uri: 'https://znews-photo.zadn.vn/w660/Uploaded/aobovhp/2020_03_18/avatar.jpg'}} 
-                        style={styles.SearchSubItemImg}
-                        />
-                        <View style={styles.SearchSubInfo}>
-                            <Text style={styles.SearchSubNamePr} numberOfLines={1}>Demo colections sdsdssd 12</Text>
-                            <View style={styles.SearchSubPrice}>
-                                <Text style={styles.Price}>220,000đ</Text>
-                                <Text style={styles.oldPrice}>280,000đ</Text>
-                            </View>
-                        </View>
-                    </View>
-                    
+                    {resultDataFiler}
                 </View>
-
                 <TouchableOpacity style={styles.SearchAll}>
                     <Text>Xem tất cả</Text>
                 </TouchableOpacity>

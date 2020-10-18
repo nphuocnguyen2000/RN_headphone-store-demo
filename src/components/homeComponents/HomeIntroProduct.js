@@ -6,6 +6,15 @@ export default function HomeIntroProduct(props) {
     const data = useSelector( state => state.products)
     const dataFilter = data.filter( (product) => product.category ===  name.toLowerCase())
     const dataRenderHome = dataFilter.slice(0, 4)
+    function priceDiscount(item){
+        let price = item.price
+        if(item.percentDiscount){
+            if(item.priceDiscount !== 0){
+                price = item.price * ((100 - item.percentDiscount)/100)
+            }
+        }   
+        return Math.ceil(price);
+    }
     return (
         
         <View style={styles.IntroProduct}>
@@ -37,8 +46,8 @@ export default function HomeIntroProduct(props) {
                                             />
                                             <Text  numberOfLines={2} style={styles.IntroName}>{product.nameProduct}</Text>
                                             <View style={styles.IntroPriceWrap}>
-                                                <Text style={styles.IntroPriceOld}>440,000 đ</Text>
-                                                <Text style={styles.IntroPrice}>{product.price},000đ</Text>
+                                                <Text style={styles.IntroPriceOld}>{product.price},000đ</Text>
+                                                <Text style={styles.IntroPrice}>{priceDiscount(product)},000đ</Text>
                                             </View>
                                         </View>
                                     </TouchableOpacity>

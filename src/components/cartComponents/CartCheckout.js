@@ -2,7 +2,25 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-export default function CartItemCheckout() {
+import NumberFormat from 'react-number-format';
+export default function CartItemCheckout(props) {
+    const {carts} = props
+    function priceDiscount(item){
+        let price = item.price
+        if(item.percentDiscount){
+            if(item.priceDiscount !== 0){
+                price = item.price * ((100 - item.percentDiscount)/100)
+            }
+        }   
+        return Math.ceil(price);
+    }
+    function cartTotal() {
+        let total = 0
+        for( let i =0; i < carts.length; i++){
+            total += ( priceDiscount(carts[i]) * carts[i].quantity)
+        }
+        return total
+    }
     return (
         <View style={styles.CartCheckout}>
             <View style={styles.CartCheckoutNote}>
@@ -11,12 +29,19 @@ export default function CartItemCheckout() {
             </View>
             <View style={styles.CartCheckoutSub}>
                 <View style={styles.CartCheckoutSubQuantity}>
-                    <Text style={{paddingRight: 5, fontWeight: '700', fontSize: 19}}>1</Text>
+                    <Text style={{paddingRight: 5, fontWeight: '700', fontSize: 19}}>
+                        {carts.length}
+                    </Text>
                     <Text>sản phẩm</Text>
                 </View>
                 <Text>Tạm tính:</Text>
                 <View style={styles.CartCheckoutSubPrice}>
-                    <Text style={{paddingRight: 5, fontWeight: '700', fontSize: 19}}>420,000₫</Text>
+                    <NumberFormat 
+                        value={cartTotal()} 
+                        displayType={'text'} 
+                        thousandSeparator={true}
+                        renderText={value => <Text style={{paddingRight: 5, fontWeight: '700', fontSize: 19}}>{value},000đ</Text>}
+                    />
                 </View>
             </View>
             <TouchableOpacity style={styles.CartCheckoutButton}>

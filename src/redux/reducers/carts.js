@@ -18,11 +18,10 @@ const myReducers = (state = inititalState, action)=>{
             }
             return [...state]
         case types.UPDATE_QUANTITY_TO_CART:
-        
             var indexUpdateCart = findIndex(state, (item)=>{
                 return item.id === action.cart.id
             })
-            if(index !== -1){
+            if(indexUpdateCart !== -1){
                 state[indexUpdateCart].quantity = action.quantity    
             }  
             return [...state]

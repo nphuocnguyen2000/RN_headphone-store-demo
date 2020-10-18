@@ -2,25 +2,52 @@ import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-export default function CartItem() {
+import { useDispatch } from 'react-redux'
+import * as actions from '../../redux/actions/index'
+export default function CartItem(props) {
+    const dispatch = useDispatch()
+    const {cart} = props
+    function updateQuantityCart(cart, quantity){
+        if(quantity >0){
+            dispatch(actions.actUpdateQuantityCart(cart, quantity))
+        }
+        else{
+            dispatch(actions.actDeleteCart(cart))
+        }
+    }
+    function priceDiscount(item){
+        let price = item.price
+        if(item.percentDiscount){
+            if(item.priceDiscount !== 0){
+                price = item.price * ((100 - item.percentDiscount)/100)
+            }
+        }   
+        return Math.ceil(price);
+    }
     return (
         <View style={styles.CartItem}>
             <View style={styles.CartItemSub}>
                 <Image 
-                    source={{uri: 'https://i5.walmartimages.com/asr/202ab4fe-c67f-4ca2-a1f4-7a5a0be2ab18_1.f277eb7613e84ccb437ec98c3a12e981.jpeg?odnWidth=612&odnHeight=612&odnBg=ffffff'}}
+                    source={{uri: cart.image}}
                     style={styles.CartItemSubImg}
                 />
                 <View style={styles.CartItemSubInfo}>
-                    <Text  numberOfLines={2} style={{paddingBottom: 2, fontSize: 15, fontWeight: '600'}}>Sony MDR-7506 Head Profes sional </Text>
-                    <Text style={{fontSize: 15, fontWeight: '700'}}>340,000 đ</Text>
+                    <Text  numberOfLines={2} style={{paddingBottom: 2, fontSize: 15, fontWeight: '600'}}>{cart.nameProduct}</Text>
+                    <Text style={{fontSize: 15, fontWeight: '700'}}>{priceDiscount(cart)},000đ</Text>
                 </View>
             </View>
             <View style={styles.CartItemQuantity}>
-                <TouchableOpacity style={styles.CartItemQuantityBtn}>
+                <TouchableOpacity style={styles.CartItemQuantityBtn}
+                    onPress={()=> updateQuantityCart(cart, cart.quantity - 1)}
+                >
                     <AntDesign name='minus' size={14} color='#eee' />
                 </TouchableOpacity>
-                <Text style={styles.CartItemQuantityNum}>1</Text>
-                <TouchableOpacity style={styles.CartItemQuantityBtn}>
+                <Text style={styles.CartItemQuantityNum}>
+                    {cart.quantity}
+                </Text>
+                <TouchableOpacity style={styles.CartItemQuantityBtn}
+                    onPress={()=> updateQuantityCart(cart, cart.quantity + 1)}
+                >
                     <AntDesign name='plus' size={14} color='#eee'/>
                 </TouchableOpacity>
             </View>

@@ -24,17 +24,7 @@ export default function HomeScreen() {
           <Stack.Screen 
             name='AllProducts' 
             component= {AllProducts} 
-            options={{ headerTitle: props => <AllProductTitle {...props} />,
-            headerStyle: {
-              shadowColor : '#5bc4ff',
-              shadowOpacity: 0,
-              shadowOffset: {
-              height: 0,
-              },
-              shadowRadius: 0,
-              elevation: 0 
-            }}
-            }
+            options={{headerShown: false}}
             // options={{headerShown: false}}
           />
           <Stack.Screen 
