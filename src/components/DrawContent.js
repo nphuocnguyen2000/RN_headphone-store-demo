@@ -12,10 +12,19 @@ import {
 } from '@react-navigation/drawer';
 
 import { AntDesign, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-
-
+import AsyncStorage from '@react-native-community/async-storage';
+import { useDispatch } from 'react-redux'
+import * as actions from '../redux/actions/index'
 export default function DrawerContent(props) {
-
+    const dispatch = useDispatch()
+    async function signOut(){
+        // console.log('+++');
+        // await AsyncStorage.removeItem('USER_TOKEN')
+        //     .then( res => console.log(res))
+        //     .catch( err => console.log(err))
+        dispatch(actions.actLogout())
+        props.navigation.closeDrawer();
+    }
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props} >

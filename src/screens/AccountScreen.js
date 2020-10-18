@@ -8,7 +8,7 @@ export default function HomeScreen() {
   return (
       <Stack.Navigator>
           <Stack.Screen 
-            name='Notify' 
+            name='Account' 
             component= {AccountMain} 
             options={{ 
                 headerShown: false

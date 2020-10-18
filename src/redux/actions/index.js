@@ -36,3 +36,18 @@ export const actDeleteCart = (cart)=>{
       cart
   }
 }
+
+
+
+export const actLogin = (infoUser)=>{
+  return{
+      type: types.HANDLE_LOGIN,
+      infoUser
+  }
+}
+
+export const actLogout = ()=>{
+  return{
+      type: types.HANDLE_LOGOUT,
+  }
+}

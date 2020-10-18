@@ -1,22 +1,37 @@
 import React, {useState} from 'react'
 import { StyleSheet, Text, View, ImageBackground, Button, TextInput, TouchableOpacity } from 'react-native'
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux'
+import * as actions from '../../redux/actions/index'
+import axios from 'axios'
 export default function Login({ navigation }) {
-
+    const dispatch = useDispatch()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
     function onChangeEmail(text) {
         setEmail(text)
     }
     function onChangePass(pass) {
         setPassword(pass)
     }
-    function onHanleLogin() {
-        console.log('email', email);
-        console.log('pass', password)
+    async function onHanleLogin() {
+        
+        await axios.post('https://api-rn-headphone-demo.herokuapp.com/account/login', {email, password})
+            .then((response) => {
+                if(response.data.errors){
+                    console.log(response.data.message);
+                }
+                else{
+                    dispatch(actions.actLogin(response.data))
+                }
+            })
+            // `.then((response) => {
+            //     AsyncStorage.setItem('USER_TOKEN', JSON.stringify(response.data.token))
+            // })`
+            .catch((error) => { //your callback if axios fails
+                console.log(error);
+            });
     }
-    
     return (
         <ImageBackground source={{uri: 'https://forum.keyshot.com/index.php?action=dlattach;topic=22523.0;attach=56433;image'}} style={styles.imageBG}>
             <View style={styles.LoginContainer}>
