@@ -14,7 +14,7 @@ export default function AccountMain() {
         dispatch(actions.actLogout())
     }
     return (
-        !isSignedIn ? 
+        !infoUser ? 
         <AuthScreen/> 
         :
         <View style={styles.Container}>

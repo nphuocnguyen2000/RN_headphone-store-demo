@@ -2,7 +2,7 @@ import * as types from '../actions/actionTypes'
 var inititalState = {
   userToken: null,
   infoUser: null,
-  isSignedIn : false,
+  isSignedIn : true,
   isLoading: false
 };
 

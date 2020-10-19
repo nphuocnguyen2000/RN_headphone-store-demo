@@ -3,10 +3,13 @@ import { StyleSheet, Text, View, Animated, SafeAreaView, Image} from 'react-nati
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import {AntDesign} from '@expo/vector-icons';     
 import { useDispatch, useSelector } from 'react-redux'
-
+import { LogBox } from 'react-native';
 import * as actions from '../../redux/actions/index'
 import ModalAddCart from './ModalAddCart';
 export default function DetailProduct({route, navigation}) {
+    LogBox.ignoreLogs([
+        'Non-serializable values were found in the navigation state',
+      ]);
 
     const [modalVisible, setModalVisible] = useState(false);
 
